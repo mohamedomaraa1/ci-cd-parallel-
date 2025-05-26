@@ -3,17 +3,16 @@ def dockerx = new org.session3.docker()
 
 pipeline {
     agent {
-        label 'agent-0'
+        label 'agent1'
     }
 
     tools {
-        jdk "java-21" // Update to match OpenJDK 21, or configure "java-8" in Jenkins to point to the correct JDK
+        jdk "java-8"
     }
 
     environment {
         DOCKER_USER = credentials('docker-user')
         DOCKER_PASS = credentials('docker-pass')
-        JAVA_HOME = "/usr/lib/jvm/java-21-openjdk-amd64" // Adjust based on your agent's JDK installation path
     }
 
     stages {
@@ -38,14 +37,9 @@ pipeline {
             parallel {
                 stage('Java Image') {
                     steps {
-                        dir('java') {
-                            script {
-                                // Ensure JAVA_HOME is set for Maven commands
-                                withEnv(["JAVA_HOME=${env.JAVA_HOME}", "PATH+MAVEN=${env.JAVA_HOME}/bin:${env.PATH}"]) {
-                                    dockerx.buildJava()
-                                    dockerx.push('mohamedomaraa/java-app', 'latest')
-                                }
-                            }
+                        script {
+                            dockerx.buildJava()
+                            dockerx.push('mohamedomaraa/java-app', 'latest')
                         }
                     }
                 }
