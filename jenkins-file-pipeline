@@ -1,2 +1,3 @@
 @Library('lab3') _
-new org.session3.Pipeline(this).runPipeline()
+def Pipeline = new org.session3.Pipeline(this)
+Pipeline.runPipeline()
