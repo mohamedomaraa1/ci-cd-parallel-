@@ -1,0 +1,2 @@
+@Library('session3') _
+new org.session3.Pipeline(this).runPipeline()
