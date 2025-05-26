@@ -1,11 +1,12 @@
 @Library('lab3')_
+def dockerx = new org.session3.docker()
 
-pipeline{
+pipeline {
     agent {
         label 'agent-0'
     }
 
-    tools{
+    tools {
         jdk "java-8"
     }
 
@@ -18,7 +19,7 @@ pipeline{
         stage('Login to DockerHub') {
             steps {
                 script {
-                    org.session3.login(env.DOCKER_USER, env.DOCKER_PASS)
+                    dockerx.login(env.DOCKER_USER, env.DOCKER_PASS)
                 }
             }
         }
@@ -26,8 +27,8 @@ pipeline{
         stage('Clone Repositories') {
             steps {
                 script {
-                    org.session3.gitClone('https://github.com/mohamedomaraa1/java.git', 'master', 'java')
-                    org.session3.gitClone('https://github.com/mohamedomaraa1/pytohn1.git', 'main', 'python')
+                    dockerx.gitClone('https://github.com/mohamedomaraa1/java.git', 'master', 'java')
+                    dockerx.gitClone('https://github.com/mohamedomaraa1/pytohn1.git', 'main', 'python')
                 }
             }
         }
@@ -36,11 +37,9 @@ pipeline{
             parallel {
                 stage('Java Image') {
                     steps {
-                        dir('java') {
-                            script {
-                                org.session3.build('mohamedomaraa/java-app', 'latest')
-                                org.session3.push('mohamedomaraa/java-app', 'latest')
-                            }
+                        script {
+                            dockerx.buildJava()
+                            dockerx.push('mohamedomaraa/java-app', 'latest')
                         }
                     }
                 }
@@ -49,8 +48,8 @@ pipeline{
                     steps {
                         dir('python') {
                             script {
-                                org.session3.build('mohamedomaraa/python-app', 'latest')
-                                org.session3.push('mohamedomaraa/python-app', 'latest')
+                                dockerx.build('mohamedomaraa/python-app', 'latest')
+                                dockerx.push('mohamedomaraa/python-app', 'latest')
                             }
                         }
                     }
