@@ -39,7 +39,7 @@ pipeline {
                     steps {
                         script {
                             dockerx.buildJava()
-                            dockerx.push('mohamedomaraa/java-app', 'latest')
+                            dockerx.push('mohamedomaraa/java', 'latest')
                         }
                     }
                 }
