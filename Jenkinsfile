@@ -3,7 +3,7 @@ def dockerx = new org.session3.docker()
 
 pipeline {
     agent {
-        label 'agent1'
+        label 'agent-0'
     }
 
     tools {
